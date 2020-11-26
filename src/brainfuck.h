@@ -17,9 +17,7 @@ int brainfuck(const char* code_pointer)
   const char* bracket_pointers[16];
   short bracket_depth = 0;
   char command;
-  char data[1024];
-  for (int i = 0; i < 1024; i++)
-    data[i] = 0x0;
+  char data[1024 * 128] = {0};
   unsigned char *data_pointer = &data[512];
 
   while (command = *(code_pointer++))
@@ -67,7 +65,13 @@ int brainfuck(const char* code_pointer)
         }
         else
         {
-          while (*(code_pointer++) != ']') {}
+          short brackets_to_close = 1;
+          while (brackets_to_close) 
+          {
+            char temp = *(code_pointer++);
+            if (temp == ']') brackets_to_close--;
+            else if (temp == '[') brackets_to_close++;
+          }
           PrintDebug("Skipped the loop!\n");
         }
         break;
@@ -85,21 +89,9 @@ int brainfuck(const char* code_pointer)
         }
         break;
 
-      // // skip all of the white space
-      // case '\n':
-      //   PrintDebug("Skipped a newline\n");
-      //   break;
-
-      // case '\t':
-      //   PrintDebug("Skipped a tab\n");
-      //   break;
-
-      // case ' ':
-      //   PrintDebug("Skipped a space\n");
-      //   break;
-
       default:
-        PrintDebug("Incorrect character %x at address %x\n", command, code_pointer);
+        PrintDebug("Skipped character %x\n", command);
     }
   }
+  return 0;
 }
