@@ -1,9 +1,11 @@
-brainfuck: ./src/main.o
-	gcc -o ./bin/brainfuck ./bin-int/main.o -O3
+CC=gcc
+CFLAGS=-O3 -Wall
 
-./src/main.o: ./src/main.c
-	mkdir ./bin-int/ ./bin/ -p
-	gcc -c ./src/main.c -o ./bin-int/main.o -O3
+brainfuck: main.o
+	$(CC) -o brainfuck main.o $(CFLAGS)
+
+main.o: main.c brainfuck.h
+	$(CC) -c main.c -o main.o $(CFLAGS)
 
 clean:
-	rm -rf ./bin/ ./bin-int/
+	rm -rf *.o brainfuck
