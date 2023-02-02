@@ -88,6 +88,7 @@ void brainfuck(const char* code_pointer)
 				}
 				else
 				{
+					// set the code pointer to the corresponding closing bracket
 					short brackets_to_close = 1;
 					while (brackets_to_close) 
 					{
